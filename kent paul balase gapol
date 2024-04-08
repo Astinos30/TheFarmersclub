@@ -1,0 +1,31 @@
+import requests
+
+# Constants
+REPO_OWNER = 'Astinos30'
+REPO_NAME = 'TheFarmersClub'
+GITHUB_API_URL = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}'
+
+# Function to list files in the repository
+def list_repo_files():
+    response = requests.get(f'{GITHUB_API_URL}/contents/')
+    if response.status_code == 200:
+        files = response.json()
+        return [file['name'] for file in files]
+    else:
+        return 'Failed to retrieve repository files'
+
+# Function to read the contents of a file
+def read_file_content(file_path):
+    response = requests.get(f'{GITHUB_API_URL}/contents/{file_path}')
+    if response.status_code == 200:
+        file_content = response.json()
+        return file_content['content']
+    else:
+        return 'Failed to retrieve file contents'
+
+# Example usage
+if __name__ == '__main__':
+    print('Listing repository files:')
+    print(list_repo_files())
+    print('\nReading README.md file content:')
+    print(read_file_content('README.md'))
